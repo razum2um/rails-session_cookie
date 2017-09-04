@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-RSpec.describe Rails::SessionCookie::WardenApp, type: :request do
+RSpec.describe Rails::SessionCookie::WardenApp, type: :request, warden: true do
   let(:user) { User.create!(email: 'ad@ad.ad', password: '123123') }
   let(:session_data) { User.serialize_into_session(user) }
 

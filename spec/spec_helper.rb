@@ -11,6 +11,9 @@ DIR = File.dirname(File.expand_path(__FILE__))
 Dir["#{DIR}/../spec/support/**/*.rb"].each { |f| require f }
 
 require 'rspec/rails'
+require 'rspec-benchmark'
+require 'capybara'
+
 require 'rails/session_cookie'
 
 RSpec.configure do |config|
@@ -21,6 +24,8 @@ RSpec.configure do |config|
   config.disable_monkey_patching!
 
   config.filter_run_excluding performance: true
+
+  config.filter_run_excluding warden: true unless defined? Warden
 
   config.expect_with :rspec do |c|
     c.syntax = :expect

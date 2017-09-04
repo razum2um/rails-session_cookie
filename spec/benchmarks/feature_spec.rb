@@ -1,9 +1,7 @@
-require 'devise'
-require 'capybara'
-require 'rspec-benchmark'
 require 'spec_helper'
 
 RSpec.feature 'Speed using capybara in feature test', performance: true do
+
   include RSpec::Benchmark::Matchers
   include Devise::Test::IntegrationHelpers
 
