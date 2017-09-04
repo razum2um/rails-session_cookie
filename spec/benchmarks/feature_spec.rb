@@ -2,7 +2,7 @@ require 'spec_helper'
 
 RSpec.feature 'Speed using capybara in feature test', performance: true do
   include RSpec::Benchmark::Matchers
-  include Devise::Test::IntegrationHelpers
+  include Devise::Test::IntegrationHelpers if defined? Devise
 
   let!(:user) { User.create!(email: 'ad@ad.ad', password: '123123') }
   let!(:session_data) { User.serialize_into_session(user) }
