@@ -12,8 +12,7 @@ RSpec.describe Rails::SessionCookie::WardenApp, type: :request do
 
       get '/home'
       user_id_arr, digest = session_data
-      expect(response.body).to eq %Q{[["warden.user.user.key",[#{user_id_arr},#{digest.inspect}]]]}
+      expect(response.body).to eq %([["warden.user.user.key",[#{user_id_arr},#{digest.inspect}]]])
     end
   end
-
 end

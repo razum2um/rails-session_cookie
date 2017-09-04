@@ -69,7 +69,6 @@ class HomeController < ActionController::Base
   end
 
   def devise_user_id
-    data = session.to_hash.except('session_id')
     render plain: JSON(current_user_id: current_user.id)
   end
 end

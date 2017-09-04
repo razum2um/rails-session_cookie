@@ -2,7 +2,6 @@ require 'action_dispatch'
 
 module Rails
   module SessionCookie
-
     # This mini rack app allows easily get rails session cookie
     class App
       def self.simple_app_from_session_hash(session = {})
@@ -23,7 +22,7 @@ module Rails
 
       attr_reader :app, :rails_app
 
-      def initialize(app, session_options = nil, &block)
+      def initialize(app, session_options = nil)
         auth_session_options = session_options || rails_app.config.session_options
 
         auth_app = if app.respond_to?(:call)

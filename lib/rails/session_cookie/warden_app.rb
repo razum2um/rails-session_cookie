@@ -3,7 +3,6 @@ require 'rails/session_cookie/app'
 
 module Rails
   module SessionCookie
-
     # This mini rack app helps setting warden session cookie
     class WardenApp < App
       def initialize(user, session_options = nil, scope = :user)
@@ -14,7 +13,7 @@ module Rails
         value = serializer.store(user, scope)
 
         auth_app = proc { |env|
-          env[Rails::SessionCookie::RACK_SESSION].merge!(key => value)
+          env[Rails::SessionCookie::RACK_SESSION][key] = value
           [200, {}, []]
         }
 
