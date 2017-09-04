@@ -29,5 +29,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'appraisal', '~> 2.2'
   spec.add_development_dependency 'rubocop', '~> 0.49'
   spec.add_development_dependency 'rspec-rails', '~> 3.6.1'
-  spec.add_development_dependency 'codeclimate-test-reporter', '~> 1.0'
+  spec.add_development_dependency 'codeclimate-test-reporter', '= 1.0.8'
+  spec.add_development_dependency 'simplecov', '= 0.13.0'
 end
