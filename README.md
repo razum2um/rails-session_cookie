@@ -52,7 +52,7 @@ Rails is modular, that's cool :)
 gem 'rails-session_cookie', group: :test
 ```
 
-## Usage
+## Usage in requests specs
 
 ```ruby
 # spec_helper.rb
@@ -98,6 +98,30 @@ Of course, you can just make use (and reuse!) of as many procs as you wish.
 
 This effectively achieves the effect as [this PR#18230](https://github.com/rails/rails/pull/18230/files), which allows session mutation
 in a less invasive way in regard to Rails itself ;)
+
+## Warden / Devise
+
+Getting session cookie is dead-simple, just get the cookie this way:
+
+```ruby
+raw_session_cookie = Rails::SessionCookie::WardenApp.new(user).session_cookie
+```
+
+*NOTE:* Warden uses an [ugly hack, in my opinion](https://github.com/hassox/warden/blob/master/lib/warden/test/helpers.rb#L18L23)
+to support test-mode authentication.
+
+*NOTE:* This way you no longer need `sign_in(user)` from `Devise::Test::ControllerHelpers` as well.
+Authentication is as transparent as possible and should increase readability if you understand HTTP session cookies.
+
+## Feature tests using Capybara
+
+Get the cookie as described above according to your setup, and assign this way:
+
+```ruby
+Capybara.current_session.driver.browser.set_cookie raw_session_cookie
+```
+
+*TODO:* Only tested with `:rack_test` driver!
 
 ## Contributing
 
