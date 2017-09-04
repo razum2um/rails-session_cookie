@@ -26,12 +26,12 @@ module Rails
         @app = with_session_cookie_middlewares(auth_app, auth_session_options)
       end
 
-      def call(env = default_env)
-        app.call(env)
+      def call(env = {})
+        app.call(default_env.merge(env).dup)
       end
 
-      def session_cookie(env = default_env)
-        _status, headers, _body = app.call(env)
+      def session_cookie(env = {})
+        _status, headers, _body = call(env)
         headers[ActionDispatch::Cookies::HTTP_HEADER]
       end
 

@@ -2,7 +2,10 @@ require 'spec_helper'
 
 RSpec.describe Rails::SessionCookie::App, type: :request do
   let(:value) { { current_user_id: 1, current_state: { key: 'time', value: Time.now } } }
-  let(:expected_session_data) { JSON(value.map { |k, v| [k.to_s, v] } .sort) }
+
+  def dumped_session(session = value)
+    JSON(session.map { |k, v| [k.to_s, v] } .sort)
+  end
 
   shared_examples_for 'sets proper session' do
     it 'raises without rails application' do
@@ -18,7 +21,7 @@ RSpec.describe Rails::SessionCookie::App, type: :request do
       cookies.merge(subject.session_cookie)
 
       get '/home'
-      expect(response.body).to eq expected_session_data
+      expect(response.body).to eq dumped_session
     end
   end
 
@@ -41,6 +44,25 @@ RSpec.describe Rails::SessionCookie::App, type: :request do
       end
 
       it_behaves_like 'sets proper session'
+    end
+
+    describe 'when passed additional params to auth application' do
+      let(:context) { { key: 'value' } }
+      let(:custom_session) do
+        proc { |env|
+          value.each { |k, v| env[Rails::SessionCookie::RACK_SESSION][k] = v }
+          # do your sesion magic
+          env[Rails::SessionCookie::RACK_SESSION].merge!(context)
+          [200, {}, []]
+        }
+      end
+
+      it 'stores everything into session cookie' do
+        cookies.merge(subject.session_cookie)
+
+        get '/home'
+        expect(response.body).to eq dumped_session(value.merge(context))
+      end
     end
   end
 end
