@@ -120,7 +120,7 @@ Capybara.current_session.driver.browser.set_cookie raw_session_cookie
 ## Benchmarks
 
 *NOTE:* Sometimes devise's `sing_in` is still faster than `SessionCookie` (a little though),
-becuase Warden uses an [ugly hack, in my opinion,](https://github.com/hassox/warden/blob/master/lib/warden/test/helpers.rb#L18L23)
+because Warden uses an [ugly hack, in my opinion,](https://github.com/hassox/warden/blob/master/lib/warden/test/helpers.rb#L18L23)
 to support test-mode authentication.
 
 But, still, in average performance of this gem is not worse *if used with user_id->cookie caching*
