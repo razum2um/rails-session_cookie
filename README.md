@@ -107,12 +107,6 @@ Getting session cookie is dead-simple, just get the cookie this way:
 raw_session_cookie = Rails::SessionCookie::WardenApp.new(user).session_cookie
 ```
 
-*NOTE:* Warden uses an [ugly hack, in my opinion](https://github.com/hassox/warden/blob/master/lib/warden/test/helpers.rb#L18L23)
-to support test-mode authentication.
-
-*NOTE:* This way you no longer need `sign_in(user)` from `Devise::Test::ControllerHelpers` as well.
-Authentication is as transparent as possible and should increase readability if you understand HTTP session cookies.
-
 ## Feature tests using Capybara
 
 Get the cookie as described above according to your setup, and assign this way:
@@ -124,6 +118,14 @@ Capybara.current_session.driver.browser.set_cookie raw_session_cookie
 *TODO:* Only tested with `:rack_test` driver!
 
 ## Benchmarks
+
+*NOTE:* Sometimes devise's `sing_in` is still faster than `SessionCookie` (a little though),
+becuase Warden uses an [ugly hack, in my opinion,](https://github.com/hassox/warden/blob/master/lib/warden/test/helpers.rb#L18L23)
+to support test-mode authentication.
+
+But, still, in average performance of this gem is not worse *if used with user_id->cookie caching*
+Besides, authentication becomes as transparent as possible and should increase readability
+if you understand HTTP session cookies principles.
 
 ```sh
 $ appraisal rails-5.1-warden rspec -t performance spec/benchmarks
