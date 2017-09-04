@@ -1,34 +1,25 @@
 # Rails::SessionCookie
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/rails/session_cookie`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
 
 ## Installation
 
-Add this line to your application's Gemfile:
-
 ```ruby
-gem 'rails-session_cookie'
+# Gemfile
+gem 'rails-session_cookie', group: :test
 ```
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install rails-session_cookie
 
 ## Usage
 
-TODO: Write usage instructions here
-
-## Development
-
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
-
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+```ruby
+# spec_helper.rb
+require 'rails/session_cookie'
+before(:each, authenticated: true) do
+  raw_session_cookie = Rails::SessionCookie::App.new(current_user_id: 1).session_cookie
+  # depending on Rails version and session configuration
+  # raw_session_cookie = "cookie_store_key=data--digest; path=/; HttpOnly"
+  cookies.merge(raw_session_cookie)
+end
+```
 
 ## Contributing
 
