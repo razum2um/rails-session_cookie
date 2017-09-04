@@ -1,6 +1,6 @@
 # Rails::SessionCookie
 
-Fast, loosely coupled requests specs for cookie authentificated application.
+Fast, loosely coupled requests specs for a cookie-authenticated application.
 
 ## Why
 
@@ -26,14 +26,14 @@ RSpec.describe 'User inferface', type: :request do
     login(user)
   end
 
-  it 'private data' do
+  it 'shows private data' do
     get '/dashboard'
   end
 end
 ```
 
-In a usual user-driven application this tightly couples *all* request specs, which require cookie authentication, to login process.
-If it fails - everything fails. If it's not blazing fast - it slows the whole suite down.
+In a usual user-driven application this tightly couples *all* request specs, which require authentication, to the login process.
+If it fails - everything fails. If it's not blazingly fast - it slows the whole suite down.
 
 One may move to token-based authentification, especially when having API. That's reasonable and nice.
 But we can think about a session cookie as a token passed in a special header!
@@ -55,20 +55,25 @@ gem 'rails-session_cookie', group: :test
 require 'rails/session_cookie'
 
 def login(current_user)
-  # depending on Rails version and session configuration
-  # "cookie_store_key=data--digest; path=/; HttpOnly"
+  # depending on Rails version and session configuration this looks like "cookie_store_key=data--digest; path=/; HttpOnly"
   raw_session_cookie = Rails::SessionCookie::App.new(current_user_id: current_user.id).session_cookie
 
-  # note, not `<<`
+  # note, it's raw, not `<<`
   cookies.merge(raw_session_cookie)
 end
 
 # ...everything else the same
 ```
 
-Now you can cache `raw_session_cookie` globally or per-thread depending on `current_user_id` to get things even more faster!
+Now you can cache `raw_session_cookie` globally or per-thread depending on `current_user_id` to get things even faster!
 
-Strictly speaking, you may cache `Set-Cookie` response header from `/login` url to achieve same speed (but not coupling ;)
+You can also use the `raw_session_cookie` directly like this:
+
+```
+get "/", {}, { "HTTP_COOKIE" => raw_session_cookie }
+```
+
+Strictly speaking, you may cache `Set-Cookie` response header from `/login` URL to achieve same speed (but not coupling ;)
 However, never saw this in practice, and consider caching of requests in before-phase bad. YMMV.
 
 ## Advanced usage
@@ -85,10 +90,10 @@ If you need more sophisticated logic:
 end
 ```
 
-Of course, you can just make use of as many procs as you wish.
+Of course, you can just make use (and reuse!) of as many procs as you wish.
 
-This effectively achives same effect as [this PR#18230](https://github.com/rails/rails/pull/18230/files), which allows session mutation
-in a less invasive way ;)
+This effectively achieves the effect as [this PR#18230](https://github.com/rails/rails/pull/18230/files), which allows session mutation
+in a less invasive way in regard to Rails itself ;)
 
 ## Contributing
 
