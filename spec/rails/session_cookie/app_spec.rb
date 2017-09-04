@@ -3,10 +3,6 @@ require 'spec_helper'
 RSpec.describe Rails::SessionCookie::App, type: :request do
   let(:value) { { current_user_id: 1, current_state: { key: 'time', value: Time.now } } }
 
-  def dumped_session(session = value)
-    JSON(session.map { |k, v| [k.to_s, v] } .sort)
-  end
-
   shared_examples_for 'sets proper session' do
     it 'raises without rails application' do
       expect(Rails).to receive(:application)
@@ -21,7 +17,7 @@ RSpec.describe Rails::SessionCookie::App, type: :request do
       cookies.merge(subject.session_cookie)
 
       get '/home'
-      expect(response.body).to eq dumped_session
+      expect(response.body).to eq dumped_session(value)
     end
   end
 

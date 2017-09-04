@@ -1,11 +1,7 @@
-require 'rack'
-require 'active_support'
 require 'action_dispatch'
 
 module Rails
   module SessionCookie
-    NoRailsApplication = Class.new(StandardError)
-    RACK_SESSION = 'rack.session'.freeze # upstream constant name is changing
 
     # This mini rack app allows easily get rails session cookie
     class App
@@ -18,12 +14,25 @@ module Rails
         }
       end
 
+      def self.simple_app_returning_rack(app)
+        proc { |env|
+          result = app.call(env)
+          result.is_a?(Hash) ? [200, result, []] : result
+        }
+      end
+
       attr_reader :app, :rails_app
 
-      def initialize(app, session_options = nil)
+      def initialize(app, session_options = nil, &block)
         auth_session_options = session_options || rails_app.config.session_options
-        auth_app = app.respond_to?(:call) ? app : self.class.simple_app_from_session_hash(app)
-        @app = with_session_cookie_middlewares(auth_app, auth_session_options)
+
+        auth_app = if app.respond_to?(:call)
+                     self.class.simple_app_returning_rack(app)
+                   else
+                     self.class.simple_app_from_session_hash(app)
+                   end
+
+        @app = with_middlewares(auth_app, auth_session_options)
       end
 
       def call(env = {})
@@ -37,7 +46,7 @@ module Rails
 
       private
 
-      def with_session_cookie_middlewares(app, session_options)
+      def with_middlewares(app, session_options)
         ActionDispatch::Cookies.new(
           ActionDispatch::Session::CookieStore.new(
             app, session_options
