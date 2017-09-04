@@ -5,6 +5,7 @@ Fast, loosely coupled requests specs for a cookie-authenticated application.
 [![Gem Version][GV img]][Gem Version]
 [![Build Status][BS img]][Build Status]
 [![Code Climate][CC img]][Code Climate]
+[![Coverage][CV img]][Coverage]
 
 ## Why
 
@@ -106,7 +107,9 @@ Bug reports and pull requests are welcome on GitHub at https://github.com/razum2
 [Gem Version]: https://rubygems.org/gems/rails-session_cookie
 [Build Status]: https://travis-ci.org/razum2um/rails-session_cookie
 [Code Climate]: https://codeclimate.com/github/razum2um/rails-session_cookie
+[Coverage]: https://codeclimate.com/github/razum2um/rails-session_cookie/coverage
 
 [GV img]: https://badge.fury.io/rb/rails-session_cookie.png
 [BS img]: https://travis-ci.org/razum2um/rails-session_cookie.png
-[CC img]: https://codeclimate.com/github/razum2um/rails-session_cookie.png
+[CC img]: https://codeclimate.com/github/razum2um/rails-session_cookie/badges/gpa.svg
+[CV img]: https://codeclimate.com/github/razum2um/rails-session_cookie/badges/coverage.svg
