@@ -1,7 +1,8 @@
-require "rails/session_cookie/version"
+require 'rails/session_cookie/app'
+require 'rails/session_cookie/version'
 
 module Rails
+  # :nodoc:
   module SessionCookie
-    # Your code goes here...
   end
 end
