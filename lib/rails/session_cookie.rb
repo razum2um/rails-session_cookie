@@ -1,5 +1,5 @@
 require 'rails/session_cookie/app'
-require 'rails/session_cookie/warden_app'
+require 'rails/session_cookie/warden_app' if defined? Warden
 require 'rails/session_cookie/version'
 
 module Rails
