@@ -2,6 +2,10 @@
 
 Fast, loosely coupled requests specs for a cookie-authenticated application.
 
+[![Gem Version][GV img]][Gem Version]
+[![Build Status][BS img]][Build Status]
+[![Code Climate][CC img]][Code Climate]
+
 ## Why
 
 Probably, you might have seen a lot code like this:
@@ -98,3 +102,11 @@ in a less invasive way in regard to Rails itself ;)
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/razum2um/rails-session_cookie.
+
+[Gem Version]: https://rubygems.org/gems/rails-session_cookie
+[Build Status]: https://travis-ci.org/razum2um/rails-session_cookie
+[Code Climate]: https://codeclimate.com/github/razum2um/rails-session_cookie
+
+[GV img]: https://badge.fury.io/rb/rails-session_cookie.png
+[BS img]: https://travis-ci.org/razum2um/rails-session_cookie.png
+[CC img]: https://codeclimate.com/github/razum2um/rails-session_cookie.png
