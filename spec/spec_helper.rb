@@ -45,7 +45,6 @@ end
 
 class SingleCodeClimateFormatter < CodeClimate::TestReporter::Formatter
   def format(simplecov_result)
-
     # HM.. it's single one in simplecov-0.13
 
     # simplecov_results = results.map do |command_name, data|
