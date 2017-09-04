@@ -17,7 +17,13 @@ ENV['DATABASE_URL'] = 'sqlite3::memory:'
 ActiveRecord::Base.establish_connection(adapter: 'sqlite3', database: ':memory:')
 ActiveRecord::Base.logger = LOGGER
 
-class DeviseCreateUsers < ActiveRecord::Migration[Rails.version[0..2]]
+cls = if Gem::Version.new(Rails.version) < Gem::Version.new('5.0')
+        ActiveRecord::Migration
+      else
+        ActiveRecord::Migration[Rails.version[0..2]]
+      end
+
+class DeviseCreateUsers < cls
   def change
     create_table(:users) do |t|
       t.string :email,              null: false
