@@ -109,7 +109,7 @@ Bug reports and pull requests are welcome on GitHub at https://github.com/razum2
 [Code Climate]: https://codeclimate.com/github/razum2um/rails-session_cookie
 [Coverage]: https://codeclimate.com/github/razum2um/rails-session_cookie/coverage
 
-[GV img]: https://badge.fury.io/rb/rails-session_cookie.png
+[GV img]: https://badge.fury.io/rb/rails-session_cookie.svg
 [BS img]: https://travis-ci.org/razum2um/rails-session_cookie.png
 [CC img]: https://codeclimate.com/github/razum2um/rails-session_cookie/badges/gpa.svg
 [CV img]: https://codeclimate.com/github/razum2um/rails-session_cookie/badges/coverage.svg
