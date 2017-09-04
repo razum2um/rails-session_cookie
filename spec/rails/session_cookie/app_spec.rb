@@ -25,7 +25,7 @@ RSpec.describe Rails::SessionCookie::App, type: :request do
     end
   end
 
-  describe '.session_cookie' do
+  describe '#session_cookie' do
     let(:custom_session) { raise 'assign :app in let' }
     subject { described_class.new(custom_session) }
 
