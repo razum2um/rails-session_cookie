@@ -3,4 +3,8 @@ language: ruby
 rvm:
   - 2.3.2
   - 2.2.7
+gemfile:
+  - gemfiles/rails_4.2.gemfile
+  - gemfiles/rails_5.0.gemfile
+  - gemfiles/rails_5.1.gemfile
 before_install: gem install bundler -v 1.15.4
