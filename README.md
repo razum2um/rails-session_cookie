@@ -123,6 +123,34 @@ Capybara.current_session.driver.browser.set_cookie raw_session_cookie
 
 *TODO:* Only tested with `:rack_test` driver!
 
+## Benchmarks
+
+```sh
+$ appraisal rails-5.1-warden rspec -t performance spec/benchmarks
+
+Speed using capybara in feature test
+  correctness of
+    SessionCookie
+      is correct
+    Devise Helpers
+      are correct
+  against Devise::Test::Helpers
+    is obviously slower separately
+    is not slower than devise helpers if using cache and executing multiple specs in a suite
+
+Speed using custom sign-in in request test
+  correctness of
+    SessionCookie
+      is correct
+    usual session controller
+      is correct
+  against custom sign in route
+    is faster separately without cache
+
+Finished in 1.89 seconds (files took 0.89589 seconds to load)
+7 examples, 0 failures
+```
+
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/razum2um/rails-session_cookie.

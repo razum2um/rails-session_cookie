@@ -5,9 +5,14 @@
 require 'action_controller/railtie'
 require 'active_record/railtie'
 
-require 'devise'
-require 'devise/rails/routes'
-require 'devise/rails/warden_compat'
+# rubocop:disable Lint/HandleExceptions
+begin
+  require 'devise'
+  require 'devise/rails/routes'
+  require 'devise/rails/warden_compat'
+rescue LoadError
+end
+# rubocop:enable Lint/HandleExceptions
 
 LEVEL = 2
 LOGGER = Logger.new(IO::NULL)
@@ -33,10 +38,12 @@ class DeviseCreateUsers < cls
   end
 end
 
-Devise.setup do |config|
-  require 'devise/orm/active_record'
-  config.secret_key = 'devise_secret_key'
-  config.parent_controller = ActionController::Base
+if defined? Devise
+  Devise.setup do |config|
+    require 'devise/orm/active_record'
+    config.secret_key = 'devise_secret_key'
+    config.parent_controller = ActionController::Base
+  end
 end
 
 class DebugSessionApp < Rails::Application
@@ -49,8 +56,10 @@ class DebugSessionApp < Rails::Application
   secrets.secret_token    = 'secret_token'
   secrets.secret_key_base = 'secret_key_base'
 
-  config.middleware.use Warden::Manager do |config|
-    Devise.warden_config = config
+  if defined? Devise
+    config.middleware.use Warden::Manager do |config|
+      Devise.warden_config = config
+    end
   end
 end
 
@@ -58,14 +67,14 @@ Rails.application.initialize! # required for Devise.warden_config
 DeviseCreateUsers.migrate(:up)
 
 class User < ActiveRecord::Base
-  devise :database_authenticatable
+  devise :database_authenticatable if defined? Devise
 end
 
 Rails.application.routes.draw do
-  devise_for :users
-  resources :home, only: [:index] do
-    get :devise_user_id, on: :collection
-  end
+  devise_for :users if defined? Devise
+
+  post '/custom_sign_in' => 'home#custom_sign_in'
+  resources :home, only: [:index]
 end
 
 class HomeController < ActionController::Base
@@ -74,7 +83,13 @@ class HomeController < ActionController::Base
     render plain: JSON(data.sort)
   end
 
-  def devise_user_id
-    render plain: JSON(current_user_id: current_user.id)
+  def custom_sign_in
+    user = User.find_by(email: params.require(:email))
+    if user.valid_password?(params.require(:password))
+      session["warden.user.user.key"] = User.serialize_into_session(user)
+      render plain: 'ok'
+    else
+      render plain: 'wrong password'
+    end
   end
 end

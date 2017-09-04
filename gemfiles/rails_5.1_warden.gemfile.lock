@@ -52,9 +52,10 @@ GEM
       thor (>= 0.14.0)
     arel (8.0.0)
     ast (2.3.0)
+    bcrypt (3.1.11)
     benchmark-perf (0.2.1)
     builder (3.2.3)
-    byebug (9.0.6)
+    byebug (9.1.0)
     capybara (2.15.1)
       addressable
       mini_mime (>= 0.1.3)
@@ -64,8 +65,14 @@ GEM
       xpath (~> 2.0)
     codeclimate-test-reporter (1.0.8)
       simplecov (<= 0.13)
-    coderay (1.1.1)
+    coderay (1.1.2)
     concurrent-ruby (1.0.5)
+    devise (4.3.0)
+      bcrypt (~> 3.0)
+      orm_adapter (~> 0.1)
+      railties (>= 4.1.0, < 5.2)
+      responders
+      warden (~> 1.2.3)
     diff-lcs (1.3)
     docile (1.1.5)
     erubi (1.6.1)
@@ -87,6 +94,7 @@ GEM
     nio4r (2.1.0)
     nokogiri (1.8.0)
       mini_portile2 (~> 2.2.0)
+    orm_adapter (0.5.0)
     parallel (1.12.0)
     parser (2.4.0.0)
       ast (~> 2.2)
@@ -95,8 +103,8 @@ GEM
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
       slop (~> 3.4)
-    pry-byebug (3.4.2)
-      byebug (~> 9.0)
+    pry-byebug (3.5.0)
+      byebug (~> 9.1)
       pry (~> 0.10)
     public_suffix (3.0.0)
     rack (2.0.3)
@@ -128,6 +136,9 @@ GEM
     rainbow (2.2.2)
       rake
     rake (10.5.0)
+    responders (2.4.0)
+      actionpack (>= 4.2.0, < 5.3)
+      railties (>= 4.2.0, < 5.3)
     rspec (3.6.0)
       rspec-core (~> 3.6.0)
       rspec-expectations (~> 3.6.0)
@@ -179,6 +190,8 @@ GEM
     tzinfo (1.2.3)
       thread_safe (~> 0.1)
     unicode-display_width (1.3.0)
+    warden (1.2.7)
+      rack (>= 1.0)
     websocket-driver (0.6.5)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.2)
@@ -193,6 +206,7 @@ DEPENDENCIES
   bundler (~> 1.15)
   capybara (~> 2.15)
   codeclimate-test-reporter (= 1.0.8)
+  devise (~> 4.3)
   pry-byebug
   rails (~> 5.1.3)
   rails-session_cookie!
@@ -203,6 +217,7 @@ DEPENDENCIES
   rubocop (~> 0.49)
   simplecov (= 0.13.0)
   sqlite3 (~> 1.3)
+  warden (>= 1.2)
 
 BUNDLED WITH
    1.15.4
