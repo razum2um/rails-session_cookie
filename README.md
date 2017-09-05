@@ -40,10 +40,15 @@ In a usual user-driven application this tightly couples *all* request specs, whi
 If it fails - everything fails. If it's not blazingly fast - it slows the whole suite down.
 
 One may move to token-based authentification, especially when having API. That's reasonable and nice.
-But we can think about a session cookie as a token passed in a special header!
+But HTTP is stateless, really we don't need to do several requests, we can think about a session cookie
+as a token passed in a special header!
 
-This gem replaces your usual process with the simplest 2 rails middleware pass.
-Rails is modular, that's cool :)
+You can easily pass headers in tests, the only hard thing is getting the cookie value.
+Rails may change how a state is serialized into the session cookie. It can be encrypted or not, marshaled
+(an old story for rails-3 legacy) or JSONed. Short story long: only rails knows how to generate cookie from data.
+
+This gem replaces your usual process of getting session cookie with the simplest rack app utilizing
+2 rails middlewares. Rails is modular, that's cool :)
 
 ## Installation
 
