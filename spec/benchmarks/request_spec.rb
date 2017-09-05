@@ -24,7 +24,10 @@ RSpec.describe 'Speed using custom sign-in in request test', type: :request, per
 
     describe 'usual session controller' do
       it 'is correct' do
-        post '/custom_sign_in', email: email, password: password
+        auth_data = { email: email, password: password }
+        params = RAILS4 ? auth_data : { params: auth_data }
+        post '/custom_sign_in', params
+
         get '/home'
         user_id_arr, digest = session_data
         expect(response.body).to eq %([["warden.user.user.key",[#{user_id_arr},#{digest.inspect}]]])
@@ -38,7 +41,9 @@ RSpec.describe 'Speed using custom sign-in in request test', type: :request, per
         raw_session_cookie = Rails::SessionCookie::WardenApp.new(user).session_cookie
         Capybara.current_session.driver.browser.set_cookie raw_session_cookie
       end.to perform_faster_than {
-        post '/custom_sign_in', email: user.email, password: password
+        auth_data = { email: email, password: password }
+        params = RAILS4 ? auth_data : { params: auth_data }
+        post '/custom_sign_in', params
       }
     end
   end

@@ -22,7 +22,8 @@ ENV['DATABASE_URL'] = 'sqlite3::memory:'
 ActiveRecord::Base.establish_connection(adapter: 'sqlite3', database: ':memory:')
 ActiveRecord::Base.logger = LOGGER
 
-cls = if Gem::Version.new(Rails.version) < Gem::Version.new('5.0')
+RAILS4 = Gem::Version.new(Rails.version) < Gem::Version.new('5.0')
+cls = if RAILS4
         ActiveRecord::Migration
       else
         ActiveRecord::Migration[Rails.version[0..2]]
