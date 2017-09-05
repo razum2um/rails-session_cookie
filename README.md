@@ -14,7 +14,7 @@ Probably, you might have seen a lot code like this:
 # config/initializers/session_store.rb
 Rails.application.config.session_store :cookie_store
 
-# authentificaing method (maybe Devise or whatever)
+# authenticating method (maybe Devise or whatever)
 session[:current_user_id] = current_user.id
 
 # somewhere in helper for request specs
@@ -23,7 +23,7 @@ def login(current_user)
 end
 
 # now every request spec is calling login request
-RSpec.describe 'User inferface', type: :request do
+RSpec.describe 'User interface', type: :request do
   let(:user) { create :user }
 
   before do
@@ -37,15 +37,15 @@ end
 ```
 
 In a usual user-driven application this tightly couples *all* request specs, which require authentication, to the login process.
-If it fails - everything fails. If it's not blazingly fast - it slows the whole suite down.
+If it fails - everything fails. If it's not blazing fast - it slows the whole suite down.
 
-One may move to token-based authentification, especially when having API. That's reasonable and nice.
+One may move to token-based authentication, especially when having API. That's reasonable and nice.
 But HTTP is stateless, really we don't need to do several requests, we can think about a session cookie
 as a token passed in a special header!
 
 You can easily pass headers in tests, the only hard thing is getting the cookie value.
-Rails may change how a state is serialized into the session cookie. It can be encrypted or not, marshaled
-(an old story for rails-3 legacy) or JSONed. Short story long: only rails knows how to generate cookie from data.
+Rails may change how a state is serialized into the session cookie. It can be encrypted or not, marshalled
+(an old story for rails-3 legacy) or JSONed. Long story short: only rails knows how to generate cookie from data.
 
 This gem replaces your usual process of getting session cookie with the simplest rack app utilizing
 2 rails middlewares. Rails is modular, that's cool :)
@@ -166,7 +166,7 @@ session cookie (no cache):      611.4 i/s - 1.15x  slower
 
 ```
 
-But when it comes with comparison to a simplest custom authentication (see `spec/support/rails_app.rb`),
+But when it comes with comparison to a simple custom authentication (see `spec/support/rails_app.rb`),
 this gem is several times faster! (custom action checks password, hits database, request touches the whole rails middleware stack)
 
 ```sh
