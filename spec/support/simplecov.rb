@@ -23,6 +23,9 @@ class SingleCodeClimateFormatter < CodeClimate::TestReporter::Formatter
 end
 
 SimpleCov.formatter = ENV['CI'] ? SingleCodeClimateFormatter : SimpleCov::Formatter::HTMLFormatter
-SimpleCov.start 'rails' do
-  add_filter 'lib/rails/session_cookie/version.rb'
+
+if ENV['BUNDLE_GEMFILE'] =~ /warden/ # only compute coverage with all capacity
+  SimpleCov.start 'rails' do
+    add_filter 'lib/rails/session_cookie/version.rb'
+  end
 end
