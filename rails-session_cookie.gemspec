@@ -36,4 +36,5 @@ Gem::Specification.new do |spec|
   # bench
   spec.add_development_dependency 'rspec-benchmark', '~> 0.3'
   spec.add_development_dependency 'capybara', '~> 2.15'
+  spec.add_development_dependency 'benchmark-ips', '~> 2.7.2'
 end

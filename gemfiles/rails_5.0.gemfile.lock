@@ -52,6 +52,7 @@ GEM
       thor (>= 0.14.0)
     arel (7.1.4)
     ast (2.3.0)
+    benchmark-ips (2.7.2)
     benchmark-perf (0.2.1)
     builder (3.2.3)
     byebug (9.0.6)
@@ -190,6 +191,7 @@ PLATFORMS
 
 DEPENDENCIES
   appraisal (~> 2.2)
+  benchmark-ips (~> 2.7.2)
   bundler (~> 1.15)
   capybara (~> 2.15)
   codeclimate-test-reporter (= 1.0.8)

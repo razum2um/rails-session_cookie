@@ -87,7 +87,7 @@ class HomeController < ActionController::Base
   def custom_sign_in
     user = User.find_by(email: params.require(:email))
     if user.valid_password?(params.require(:password))
-      session['warden.user.user.key'] = User.serialize_into_session(user)
+      session['current_user_id'] = user.id
       render plain: 'ok'
     else
       render plain: 'wrong password'

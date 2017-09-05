@@ -140,6 +140,32 @@ Speed using capybara in feature test
     is obviously slower separately
     is not slower than devise helpers if using cache and executing multiple specs in a suite
 
+Warming up --------------------------------------
+devise sign_in
+                        70.000  i/100ms
+session cookie
+                        70.000  i/100ms
+session cookie (no cache)
+                        62.000  i/100ms
+Calculating -------------------------------------
+devise sign_in
+                        700.554  (± 5.3%) i/s -      3.500k in   5.011356s
+session cookie
+                        686.868  (± 4.7%) i/s -      3.430k in   5.005542s
+session cookie (no cache)
+                        611.439  (± 4.9%) i/s -      3.100k in   5.083986s
+
+Comparison:
+devise sign_in           :      700.6 i/s
+session cookie           :      686.9 i/s - same-ish: difference falls within error
+session cookie (no cache):      611.4 i/s - 1.15x  slower
+
+```
+
+But when it comes with comparison to a simplest custom authentication (see `spec/support/rails_app.rb`),
+this gem is several times faster!
+
+```sh
 Speed using custom sign-in in request test
   correctness of
     SessionCookie
@@ -149,8 +175,25 @@ Speed using custom sign-in in request test
   against custom sign in route
     is faster separately without cache
 
-Finished in 1.89 seconds (files took 0.89589 seconds to load)
-7 examples, 0 failures
+Warming up --------------------------------------
+custom sign in
+                         1.000  i/100ms
+session cookie
+                         1.759k i/100ms
+session cookie (no cache)
+                       482.000  i/100ms
+Calculating -------------------------------------
+custom sign in
+                         11.219  (± 0.0%) i/s -     57.000  in   5.082143s
+session cookie
+                         17.573k (± 2.0%) i/s -     87.950k in   5.006754s
+session cookie (no cache)
+                          4.714k (± 5.0%) i/s -     23.618k in   5.023448s
+
+Comparison:
+session cookie           :    17573.4 i/s
+session cookie (no cache):     4714.3 i/s - 3.73x  slower
+custom sign in           :       11.2 i/s - 1566.44x  slower
 ```
 
 ## Contributing
