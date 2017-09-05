@@ -1,4 +1,10 @@
-require 'warden'
+# rubocop:disable Lint/HandleExceptions
+begin
+  require 'warden'
+rescue LoadError
+end
+# rubocop:enable Lint/HandleExceptions
+
 require 'rails/session_cookie/app'
 
 module Rails
