@@ -1,5 +1,6 @@
 AllCops:
   Exclude:
+    - 'lib/rails-session_cookie.rb'
     - 'gemfiles/vendor/**/*'
 Metrics/LineLength:
   Max: 120
