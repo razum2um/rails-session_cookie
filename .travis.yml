@@ -13,6 +13,3 @@ gemfile:
   - gemfiles/rails_5.1.gemfile
   - gemfiles/rails_5.1_warden.gemfile
 before_install: gem install bundler -v 1.15.4
-script:
-  - bundle exec rake
-  - bundle exec codeclimate-test-reporter
