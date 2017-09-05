@@ -85,13 +85,12 @@ However, never saw this in practice, and consider caching of requests in before-
 If you need more sophisticated logic:
 
 ```ruby
-  auth_app = proc { |env|
-    # do your magic
-    env[Rails::SessionCookie::RACK_SESSION].merge!(context)
-    [200, {}, []]
-  }
-  raw_session_cookie = Rails::SessionCookie::App.new(auth_app).session_cookie
-end
+auth_app = proc { |env|
+  # do your magic
+  env[Rails::SessionCookie::RACK_SESSION].merge!(context)
+  [200, {}, []]
+}
+raw_session_cookie = Rails::SessionCookie::App.new(auth_app).session_cookie
 ```
 
 Of course, you can just make use (and reuse!) of as many procs as you wish.
@@ -128,7 +127,7 @@ Besides, authentication becomes as transparent as possible and should increase r
 if you understand HTTP session cookies principles.
 
 ```sh
-$ appraisal rails-5.1-warden rspec -t performance spec/benchmarks
+$ appraisal rails-5.1-warden rspec -t performance spec/benchmarks/feature_spec.rb
 
 Speed using capybara in feature test
   correctness of
@@ -163,9 +162,11 @@ session cookie (no cache):      611.4 i/s - 1.15x  slower
 ```
 
 But when it comes with comparison to a simplest custom authentication (see `spec/support/rails_app.rb`),
-this gem is several times faster!
+this gem is several times faster! (custom action checks password, hits database, request touches the whole rails middleware stack)
 
 ```sh
+$ appraisal rails-5.1-warden rspec -t performance spec/benchmarks/request_spec.rb
+
 Speed using custom sign-in in request test
   correctness of
     SessionCookie
