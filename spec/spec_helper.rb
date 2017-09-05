@@ -14,7 +14,7 @@ require 'rspec/rails'
 require 'rspec-benchmark'
 require 'capybara'
 
-require 'rails/session_cookie'
+require 'rails-session_cookie'
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
