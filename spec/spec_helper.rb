@@ -1,4 +1,6 @@
 require 'bundler/setup'
+require 'simplecov'
+SimpleCov.start
 
 # rubocop:disable Lint/HandleExceptions
 begin
