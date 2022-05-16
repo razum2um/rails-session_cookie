@@ -1,16 +1,31 @@
+# frozen_string_literal: true
+
 require 'bundler/setup'
 require 'simplecov'
 SimpleCov.start
 
-# rubocop:disable Lint/HandleExceptions
+if ENV.fetch('CI', nil) && ENV.fetch('CODECOV_TOKEN', nil)
+  require 'codecov'
+  SimpleCov.formatter = SimpleCov::Formatter::Codecov
+end
+
 begin
   require 'pry-byebug'
-rescue LoadError
+rescue LoadError # rubocop:disable Lint/SuppressedException
 end
-# rubocop:enable Lint/HandleExceptions
+
+begin
+  require 'devise'
+  require 'warden/config'
+  DEVISE_APP = true
+  WARDEN_CONFIG = Warden::Config.new
+rescue LoadError
+  DEVISE_APP = false
+  WARDEN_CONFIG = nil
+end
 
 DIR = File.dirname(File.expand_path(__FILE__))
-Dir["#{DIR}/../spec/support/**/*.rb"].each { |f| require f }
+Dir["#{DIR}/../spec/support/**/*.rb"].sort.each { |f| require f }
 
 require 'rspec/rails'
 require 'rspec-benchmark'
@@ -25,9 +40,9 @@ RSpec.configure do |config|
   # Disable RSpec exposing methods globally on `Module` and `main`
   config.disable_monkey_patching!
 
-  config.filter_run_excluding performance: true
+  config.filter_run_excluding performance: true unless DEVISE_APP
 
-  config.filter_run_excluding warden: true unless defined? Warden
+  config.filter_run_excluding warden: true unless DEVISE_APP
 
   config.expect_with :rspec do |c|
     c.syntax = :expect
@@ -37,5 +52,5 @@ end
 ## common
 
 def dumped_session(session = {})
-  JSON(session.map { |k, v| [k.to_s, v] } .sort)
+  JSON(session.map { |k, v| [k.to_s, v] }.sort)
 end

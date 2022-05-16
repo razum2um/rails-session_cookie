@@ -1,0 +1,50 @@
+name: ci
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+  push:
+    branches:
+      - master
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        ruby: [ '2.6', '2.7', '3.0', '3.1' ]
+        gemfile: [ 'gemfiles/rails_5.2.gemfile', 'gemfiles/rails_5.2_warden.gemfile', 'gemfiles/rails_6.0.gemfile', 'gemfiles/rails_6.0_warden.gemfile', 'gemfiles/rails_6.1.gemfile', 'gemfiles/rails_6.1_warden.gemfile', 'gemfiles/rails_7.0.gemfile', 'gemfiles/rails_7.0_warden.gemfile' ]
+        exclude:
+          - ruby: '2.6'
+            gemfile: 'gemfiles/rails_7.0.gemfile'
+          - ruby: '2.6'
+            gemfile: 'gemfiles/rails_7.0_warden.gemfile'
+          - ruby: '3.0'
+            gemfile: 'gemfiles/rails_5.2.gemfile'
+          - ruby: '3.0'
+            gemfile: 'gemfiles/rails_5.2_warden.gemfile'
+          - ruby: '3.1'
+            gemfile: 'gemfiles/rails_5.2.gemfile'
+          - ruby: '3.1'
+            gemfile: 'gemfiles/rails_5.2_warden.gemfile'
+    name: Ruby ${{ matrix.ruby }}, Gemfile ${{ matrix.gemfile }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby }}
+      - uses: actions/cache@v2
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-gems-${{ matrix.ruby }}-${{ matrix.gemfile }}-${{ hashFiles('Gemfile', 'gemfiles/**.gemfile') }}
+          restore-keys: ${{ runner.os }}-gems-${{ matrix.ruby }}-${{ matrix.gemfile }}-${{ hashFiles('Gemfile', 'gemfiles/**.gemfile') }}
+      - name: Test
+        env:
+          CI: true
+          BUNDLE_GEMFILE: ${{ matrix.gemfile }}
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+        run: |
+          bundle config path vendor/bundle
+          bundle install --jobs 4 --retry 3
+          bundle exec rake ci

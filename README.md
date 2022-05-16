@@ -2,10 +2,15 @@
 
 Fast, loosely coupled requests specs for a cookie-authenticated application.
 
-[![Gem Version][GV img]][Gem Version]
-[![Build Status][BS img]][Build Status]
-[![Coverage][CV img]][Coverage]
+![](https://github.com/razum2um/rails-session_cookie/workflows/ci/badge.svg)
+[![Gem Version](https://badge.fury.io/rb/rails-session_cookie.svg)](https://badge.fury.io/rb/rails-session_cookie)
+[![Codecov](https://codecov.io/gh/razum2um/rails-session_cookie/branch/master/graph/badge.svg?token=X5K67X3V0Z)](undefined)
 
+Key goals:
+
+- how to login under any user in request tests quickly
+- how to speed up capybara, selenium tests
+- how to login under any user in production using rails console
 ## Why
 
 Probably, you might have seen a lot code like this:
@@ -78,7 +83,7 @@ Now you can cache `raw_session_cookie` globally or per-thread depending on `curr
 
 You can also use the `raw_session_cookie` directly like this:
 
-```
+```ruby
 get "/", {}, { "HTTP_COOKIE" => raw_session_cookie }
 ```
 
@@ -121,6 +126,30 @@ Capybara.current_session.driver.browser.set_cookie raw_session_cookie
 
 *TODO:* Only tested with `:rack_test` driver!
 
+## Login under any devise user in rails production
+
+If you're in production rails console:
+
+```ruby
+Rails::SessionCookie::WardenApp.new(User.last).session_cookie
+```
+
+If you're on remote/developer instance:
+
+```ruby
+# take values from production console:
+secret_key_base = Rails.application.env_config['action_dispatch.secret_key_base']
+data = User.serialize_into_session(user) # [[user.id], user.encrypted_password[0,29]]
+opts = Rails.application.config.session_options
+
+# in remote rails console:
+key = "warden.user.user.key" # "warden.user.#{scope}.key"
+Rails::SessionCookie::App.new({ key => data }, opts).session_cookie(secret_key_base: secret_key_base)
+```
+
+Then inject the value inside `cookies` in browser devtools.
+This another friendly reminder, why you need to keep your `SECRET_KEY_BASE` secure!
+
 ## Benchmarks
 
 *NOTE:* Sometimes devise's `sign_in` is still faster than `SessionCookie` (a little though),
@@ -133,6 +162,8 @@ if you understand HTTP session cookies principles.
 
 ```sh
 $ appraisal rails-5.1-warden rspec -t performance spec/benchmarks/feature_spec.rb
+# or just
+$ BUNDLE_GEMFILE=gemfiles/rails_6.0_warden.gemfile bundle exec rspec
 
 Speed using capybara in feature test
   correctness of
@@ -201,15 +232,3 @@ session cookie           :    17573.4 i/s
 session cookie (no cache):     4714.3 i/s - 3.73x  slower
 custom sign in           :       11.2 i/s - 1566.44x  slower
 ```
-
-## Contributing
-
-Bug reports and pull requests are welcome on GitHub at https://github.com/razum2um/rails-session_cookie.
-
-[Gem Version]: https://rubygems.org/gems/rails-session_cookie
-[Build Status]: https://travis-ci.org/razum2um/rails-session_cookie
-[Coverage]: https://codeclimate.com/github/razum2um/rails-session_cookie/coverage
-
-[GV img]: https://badge.fury.io/rb/rails-session_cookie.svg
-[BS img]: https://travis-ci.org/razum2um/rails-session_cookie.png
-[CV img]: https://codeclimate.com/github/razum2um/rails-session_cookie/badges/coverage.svg

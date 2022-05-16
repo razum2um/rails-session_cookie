@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 require 'benchmark/ips'
 require 'spec_helper'
 
 RSpec.feature 'Speed using capybara in feature test', performance: true do
   include RSpec::Benchmark::Matchers
-  include Devise::Test::IntegrationHelpers if defined? Devise
+  include Devise::Test::IntegrationHelpers if DEVISE_APP
 
   let!(:user) { User.create!(email: 'ad@ad.ad', password: '123123') }
   let!(:session_data) { User.serialize_into_session(user) }
@@ -51,13 +53,17 @@ RSpec.feature 'Speed using capybara in feature test', performance: true do
   end
 
   describe 'against Devise::Test::Helpers' do
-    it 'is obviously slower separately' do
-      expect { devise_sign_in! }.to perform_faster_than { session_cookie! }
+    if ENV.key?('PERFORMANCE')
+      it 'is not slower separately' do
+        expect { session_cookie! }.not_to perform_slower_than { devise_sign_in! }
+      end
     end
 
     it 'is not slower than devise helpers if using cache and executing multiple specs in a suite' do
-      N = (ENV['N'] || 50).to_i
-      expect { (0..N).each { session_cookie! } }.not_to perform_slower_than { (0..N).each { devise_sign_in! } }
+      if ENV.key?('PERFORMANCE')
+        n = ENV.fetch('N', 10).to_i
+        expect { n.times { session_cookie! } }.not_to perform_slower_than { n.times { devise_sign_in! } }
+      end
 
       Benchmark.ips do |x|
         x.report('devise sign_in           ') { devise_sign_in! }

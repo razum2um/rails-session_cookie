@@ -1,9 +1,11 @@
-# rubocop:disable Lint/HandleExceptions
+# frozen_string_literal: true
+
+# rubocop:disable Lint/SuppressedException
 begin
   require 'warden'
 rescue LoadError
 end
-# rubocop:enable Lint/HandleExceptions
+# rubocop:enable Lint/SuppressedException
 
 require 'rails/session_cookie/app'
 
@@ -23,7 +25,7 @@ module Rails
           [200, {}, []]
         }
 
-        @app = with_middlewares(auth_app, auth_session_options)
+        super(auth_app, auth_session_options)
       end
     end
   end
