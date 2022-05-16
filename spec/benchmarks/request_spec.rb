@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'benchmark/ips'
 require 'spec_helper'
 
@@ -24,8 +26,7 @@ RSpec.describe 'Speed using custom sign-in in request test', type: :request, per
 
   def custom_sign_in!
     auth_data = { email: email, password: password }
-    params = RAILS4 ? auth_data : { params: auth_data }
-    post '/custom_sign_in', params
+    post '/custom_sign_in', params: auth_data
   end
 
   def check_expectation!
@@ -51,7 +52,7 @@ RSpec.describe 'Speed using custom sign-in in request test', type: :request, per
 
   describe 'against custom sign in route' do
     it 'is faster separately without cache' do
-      expect { session_cookie! }.to perform_faster_than { custom_sign_in! }
+      expect { session_cookie! }.not_to perform_slower_than { custom_sign_in! } if ENV.key?('PERFORMANCE')
 
       Benchmark.ips do |x|
         x.report('custom sign in           ') { custom_sign_in! }

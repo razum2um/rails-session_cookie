@@ -1,12 +1,30 @@
 AllCops:
+  NewCops: enable
   Exclude:
     - 'lib/rails-session_cookie.rb'
     - 'gemfiles/vendor/**/*'
-Metrics/LineLength:
-  Max: 120
+Layout/LineLength:
+  Max: 180
 Style/MultilineBlockChain:
   Enabled: false
 Metrics/BlockLength:
   Enabled: false
 Lint/AmbiguousBlockAssociation:
   Enabled: false
+Style/StringLiterals:
+  Enabled: false
+Gemspec/OrderedDependencies:
+  Enabled: false
+Gemspec/RequiredRubyVersion:
+  Enabled: false
+Style/OptionalBooleanParameter:
+  Enabled: false
+Style/Documentation:
+  Enabled: false
+Bundler/OrderedGems:
+  Enabled: false
+Gemspec/RequireMFA:
+  Enabled: false
+Style/FrozenStringLiteralComment:
+  Exclude:
+    - 'gemfiles/*'

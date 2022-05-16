@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'action_dispatch'
 
 module Rails
@@ -20,7 +22,7 @@ module Rails
         }
       end
 
-      attr_reader :app, :rails_app
+      attr_reader :app
 
       def initialize(app, session_options = nil)
         auth_session_options = session_options || rails_app.config.session_options
@@ -35,7 +37,7 @@ module Rails
       end
 
       def call(env = {})
-        app.call(default_env.merge(env).dup)
+        app.call(default_env.merge(Env.new(env).env).dup)
       end
 
       def session_cookie(env = {})
@@ -58,7 +60,7 @@ module Rails
       end
 
       def rails_app
-        @rails_app ||= defined?(Rails) && Rails.application || raise(NoRailsApplication)
+        @rails_app ||= (defined?(Rails) && Rails.application) || raise(NoRailsApplication)
       end
     end
   end
